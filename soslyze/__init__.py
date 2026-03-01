@@ -62,18 +62,18 @@ class SoSLyze:
                 self.package_manager = Dnf(self.args.path)
             elif package_present(self.args.path, "yum"):
                 self.package_manager = Yum(self.args.path)
+            if package_present(self.args.path, "subscription-manager"):
+                self.subscription_manager = SubscriptionManager(self.args.path)
+            if package_present(self.args.path, "insights-client"):
+                self.insights = Insights(self.args.path)
+            if package_present(self.args.path, "satellite"):
+                self.satellite = Satellite(self.args.path)
+            if os.path.isfile(self.args.path + "/etc/rhui/rhui-tools.conf"):
+                self.rhui = Rhui(self.args.path)
+            if os.path.isdir(self.args.path + "/sos_commands/discovery"):
+                self.discovery = Discovery(self.args.path)
         except Exception as e:
             print(f"ERROR package_manager: {e}")
-        if package_present(self.args.path, "subscription-manager"):
-            self.subscription_manager = SubscriptionManager(self.args.path)
-        if package_present(self.args.path, "insights-client"):
-            self.insights = Insights(self.args.path)
-        if package_present(self.args.path, "satellite"):
-            self.satellite = Satellite(self.args.path)
-        if os.path.isfile(self.args.path + "/etc/rhui/rhui-tools.conf"):
-            self.rhui = Rhui(self.args.path)
-        if os.path.isdir(self.args.path + "/sos_commands/discovery"):
-            self.discovery = Discovery(self.args.path)
 
     def output(self):
         self.os.output()

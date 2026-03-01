@@ -1,17 +1,17 @@
 [MASTER]
 disable=
+    C0103, # invalid-name. doesn't conform to UPPER_CASE naming
     C0114, # missing-module-docstring
     C0115, # missing-class-docstring
     C0116, # missing-function-docstring
-    C0200, # Consider using enumerate instead of iterating with range and len
     C0201, # consider-iterating-dictionary
     C0206, # consider-using-dict-items
     C0301, # line-too-long
-    H0401, # docstring should not start with a space 
-    W1514, # Using open without explicitly specifying an encoding
+    # H0401,  # docstring should not start with a space
+    # W1514, # unspecified-encoding
     R0914, # Too many local variables (16/15) (too-many-locals)
-    W0122, # Use of exec
     W0612, # Unused variable 'i' (unused-variable)
     W0718, # broad-exception-caught
+
 
 
