@@ -30,6 +30,9 @@ class Rpm:
                     lines.append(tmp[i])
         self.urls = '\n'.join(lines)
         lines.clear()
+        if os.path.isfile(path + '/var/lib/rhsm/cache/releasever.json'):
+            self.releasever = Path(
+                path + '/var/lib/rhsm/cache/releasever.json').read_text()
 
     def output(self):
         print_value("Packages from 3rd party repositories:", self.rpms)
@@ -50,6 +53,11 @@ class Dnf(Rpm):
             self.exclude = parse_text(
                 path + "/etc/dnf/dnf.conf", r'.*exclude.*',
                 options=re.IGNORECASE)
+            # Check if exclude line exists but has no packages after =
+            if not self.exclude or (self.exclude and '=' in self.exclude and not self.exclude.split('=', 1)[-1].strip()):
+                self.exclude = f"{Style.GREY}No excluded packages{Style.RESET}"
+        else:
+            self.exclude = f"{Style.GREY}No excluded packages{Style.RESET}"
         if os.path.isdir(path + '/etc/dnf/vars/'):
             self.vars = '\n'.join(os.listdir(path + '/etc/dnf/vars/'))
         if not hasattr(self, "vars") or not self.vars:
@@ -65,6 +73,8 @@ class Dnf(Rpm):
             print_value("Excluded packages by yum/dnf:", self.exclude)
         if hasattr(self, "vars"):
             print_value("Yum/dnf variables:", self.vars)
+        if hasattr(self, "releasever"):
+            print_value("Release version set by subscription-manager:", self.releasever)
 
 
 class Yum(Rpm):
@@ -75,8 +85,14 @@ class Yum(Rpm):
         self.history = '\n'.join(Path(
             path + '/sos_commands/yum/yum_history').read_text()
                                  .splitlines()[0:15])
-        self.exclude = parse_text(path + "/etc/yum.conf", r'.*exclude.*',
-                                  options=re.IGNORECASE)
+        if os.path.isfile(path + "/etc/yum.conf"):
+            self.exclude = parse_text(path + "/etc/yum.conf", r'.*exclude.*',
+                                      options=re.IGNORECASE)
+            # Check if exclude line exists but has no packages after =
+            if not self.exclude or (self.exclude and '=' in self.exclude and not self.exclude.split('=', 1)[-1].strip()):
+                self.exclude = f"{Style.GREY}No excluded packages{Style.RESET}"
+        else:
+            self.exclude = f"{Style.GREY}No excluded packages{Style.RESET}"
 
         #self.vars = '\n'.join(os.listdir(path + '/etc/yum/vars/'))
         if os.path.isdir(path + '/etc/yum/vars/'):
@@ -90,3 +106,5 @@ class Yum(Rpm):
         print_value("Yum/dnf history:", self.history)
         print_value("Excluded packages by yum/dnf:", self.exclude)
         print_value("Yum/dnf variables:", self.vars)
+        if hasattr(self, "releasever"):
+            print_value("Release version set by subscription-manager:", self.releasever)
