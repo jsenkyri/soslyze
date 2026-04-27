@@ -144,6 +144,33 @@ class Satellite:
                 "|ldap_auth_source_free_ipa_count|ldap_auth_source_posix_count" +
                 "|ldap_auth_source_active_directory_count|smart_proxies_count" +
                 "|total_users_count|non_admin_users_count|taxonomies_counts).*")
+        if os.path.isdir(path + "/var/log/foreman-installer/"):
+            self.installer = []
+            for f in os.listdir(path + "/var/log/foreman-installer/"):
+                if f.endswith(".log"):
+                    for line in Path(
+                        path + f"/var/log/foreman-installer/{f}"
+                    ).read_text().splitlines():
+                        if "Running installer with args" in line:
+                            l = line.translate({ord(i): None for i in '[]",'}).split(" ")
+                            if len(l) > 10:
+                                self.installer.append(
+                                    f"{l[0]}T{l[1]} foreman-installer {" ".join(l[9:])}")
+        self.installer.sort(reverse=True)
+        if os.path.isdir(path + "/var/log/foreman-maintain/"):
+            self.maintain = []
+            for f in os.listdir(path + "/var/log/foreman-maintain/"):
+                if not f.endswith(".gz"):
+                    for line in Path(
+                        path + f"/var/log/foreman-maintain/{f}"
+                    ).read_text().splitlines():
+                        if "Running foreman-maintain" in line:
+                            l = line.translate({ord(i): None for i in '[]",'}).split(" ")
+                            if l[13] in ["service", "upgrade", "update"]:
+                                self.maintain.append(
+                                    f"{l[1]}T{l[2]} foreman-maintain {" ".join(l[13:])}")
+            self.maintain.sort(reverse=True)
+
 
     def output(self):
         print_headline("### SATELLITE INFORMATION ###")
@@ -194,4 +221,8 @@ class Satellite:
         if hasattr(self, "db_facts"):
             print_value("Fact names:", self.db_facts)
         if hasattr(self, "metrics"):
-            print_value("Usage Metrics:", self.metrics)    
+            print_value("Usage Metrics:", self.metrics)
+        if hasattr(self, "installer"):
+            print_value("Installer:", "\n".join(self.installer[0:5])) 
+        if hasattr(self, "maintain"):
+            print_value("Maintain:", "\n".join(self.maintain[0:5])) 
