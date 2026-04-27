@@ -2,7 +2,7 @@ import os.path
 from pathlib import Path
 
 from soslyze.utils import parse_text, parse_text_exclude,\
-    print_headline, print_value
+    print_headline, print_value, Style
 
 
 class Satellite:
@@ -65,23 +65,34 @@ class Satellite:
 #                r".*running.*")
 
         if os.path.isfile(path + "/sos_commands/foreman/foreman_tasks_tasks"):
-            self.tasks_running = Path(
-                path + "/sos_commands/foreman/foreman_tasks_tasks")\
-                .read_text().splitlines()[0]
             running_tasks = parse_text(
                 path + "/sos_commands/foreman/foreman_tasks_tasks",
                 r".*running.*")
             # Exclude "Check for long running tasks" entries
             filtered_tasks = "\n".join([line for line in running_tasks.split("\n")
                                        if "CheckLongRunningTasks" not in line])
-            self.tasks_running = self.tasks_running + "\n" + filtered_tasks
 
-            self.tasks_paused = Path(
-                path + "/sos_commands/foreman/foreman_tasks_tasks")\
-                .read_text().splitlines()[0]
-            self.tasks_paused = self.tasks_paused + "\n" + parse_text(
+            # Check if there are actual tasks or just the header
+            if filtered_tasks.strip():
+                header = Path(
+                    path + "/sos_commands/foreman/foreman_tasks_tasks")\
+                    .read_text().splitlines()[0]
+                self.tasks_running = header + "\n" + filtered_tasks
+            else:
+                self.tasks_running = f"{Style.GREY}No running tasks found{Style.RESET}"
+
+            paused_tasks = parse_text(
                 path + "/sos_commands/foreman/foreman_tasks_tasks",
                 r".*paused.*")
+
+            # Check if there are actual paused tasks or just the header
+            if paused_tasks.strip():
+                header = Path(
+                    path + "/sos_commands/foreman/foreman_tasks_tasks")\
+                    .read_text().splitlines()[0]
+                self.tasks_paused = header + "\n" + paused_tasks
+            else:
+                self.tasks_paused = f"{Style.GREY}No paused tasks found{Style.RESET}"
         if os.path.isfile(
                 path + "/sos_commands/foreman/foreman_settings_table"):
             self.settings = Path(
@@ -102,6 +113,11 @@ class Satellite:
                 path + "/etc/foreman-proxy/ansible.env",
                 r".*(ANSIBLE_ROLES_PATH" +
                 "|ANSIBLE_COLLECTIONS_PATHS|ANSIBLE_SSH_ARGS).*")
+        if os.path.isfile(path + "/sos_commands/podman/podman_ps_-a"):
+            if "iop-advisor" in Path(path + "/sos_commands/podman/podman_ps_-a").read_text():
+                self.insights_onprem = f"{Style.GREY}Yes, Satellite uses Insights On-Premise{Style.RESET}"
+            else:
+                self.insights_onprem = f"{Style.GREY}No, Satellite does not use Insights On-Premise{Style.RESET}"
         if os.path.isfile(
                 path + "/sos_commands/candlepin/simple_content_access"):
             self.sca = Path(
@@ -177,13 +193,13 @@ class Satellite:
         if hasattr(self, "release"):
             print_value("Satellite version:", self.release)
         if hasattr(self, "health"):
-            print_value("Hammer ping:", self.health)
+            print_value("Service status (hammer ping):", self.health)
         if hasattr(self, "certs"):
             print_value("Custom or default certificates:", self.certs)
         if hasattr(self, "hiera"):
             print_value("Custom hiera:", self.hiera)
         if hasattr(self, "capsules"):
-            print_value("Capsule overview:", self.capsules)
+            print_value("Capsule(s) overview:", self.capsules)
         if hasattr(self, "sca"):
             print_value("Organizations & SCA:", self.sca)
         if hasattr(self, "tasks_running"):
@@ -191,9 +207,11 @@ class Satellite:
         if hasattr(self, "tasks_paused"):
             print_value("Paused tasks:", self.tasks_paused)
         if hasattr(self, "settings"):
-            print_value("Satellite settings(nil=default:)", self.settings)
+            print_value("Satellite settings (nil=default):", self.settings)
+        if hasattr(self, "insights_onprem"):
+            print_value("Insights On-Premise (IoP):", self.insights_onprem)
         if hasattr(self, "ansible"):
-            print_value("Ansible integration:", self.ansible)
+            print_value("Ansible configuration:", self.ansible)
         if hasattr(self, "tuning_profile"):
             print_value("Tuning profile:", self.tuning_profile)
         if hasattr(self, "puma_stats"):
@@ -219,10 +237,10 @@ class Satellite:
         if hasattr(self, "db_candlepin"):
             print_value("Candlepin db table sizes:", self.db_candlepin)
         if hasattr(self, "db_facts"):
-            print_value("Fact names:", self.db_facts)
+            print_value("Stored foreman facts:", self.db_facts)
         if hasattr(self, "metrics"):
-            print_value("Usage Metrics:", self.metrics)
+            print_value("Usage metrics:", self.metrics)
         if hasattr(self, "installer"):
-            print_value("Installer:", "\n".join(self.installer[0:5])) 
+            print_value("Recent installer runs:", "\n".join(self.installer[0:5])) 
         if hasattr(self, "maintain"):
-            print_value("Maintain:", "\n".join(self.maintain[0:5])) 
+            print_value("Recent foreman-maintain actions (upgrade and service only):", "\n".join(self.maintain[0:5])) 
