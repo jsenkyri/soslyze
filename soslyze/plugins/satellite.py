@@ -36,9 +36,6 @@ class Satellite:
             self.puma_workers = parse_text(
                 path + "/etc/systemd/system/foreman.service.d/installer.conf",
                 r".*(PUMA_THREADS|PUMA_WORKERS).*")
-        if os.path.isfile(path + "/sos_commands/foreman/foreman-puma-status"):
-            self.puma_stats = Path(
-                path + "/sos_commands/foreman/foreman-puma-status").read_text()
         if os.path.isfile(path + "/etc/foreman/database.yml"):
             self.puma_pool = parse_text(path + "/etc/foreman/database.yml",
                                         r".*pool.*")
@@ -214,8 +211,6 @@ class Satellite:
             print_value("Ansible configuration:", self.ansible)
         if hasattr(self, "tuning_profile"):
             print_value("Tuning profile:", self.tuning_profile)
-        if hasattr(self, "puma_stats"):
-            print_value("Puma status:", self.puma_stats)
         if hasattr(self, "puma_workers"):
             print_value("Puma workers & threads:", self.puma_workers)
         if hasattr(self, "puma_pool"):
