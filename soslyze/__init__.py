@@ -39,7 +39,18 @@ class SoSLyze:
             type=self.valid_path,
             nargs='?'
             )
+        self.parser.add_argument(
+            '--output-file', '-o',
+            help='Save output to file (markdown format, no ANSI colors)',
+            type=str,
+            default=None
+            )
         self.args = self.parser.parse_args()
+
+        # Disable ANSI colors BEFORE instantiating plugins if saving to file
+        if self.args.output_file:
+            from soslyze.utils import disable_ansi_colors
+            disable_ansi_colors()
 
         if len(re.findall('8[.]', Path(
             f"{self.args.path}/etc/redhat-release")
@@ -77,6 +88,14 @@ class SoSLyze:
             print(f"ERROR package_manager: {e}")
 
     def output(self):
+        if self.args.output_file:
+            from soslyze.utils import enable_ansi_colors
+            import sys
+            import io
+
+            old_stdout = sys.stdout
+            sys.stdout = buffer = io.StringIO()
+
         self.os.output()
 
         if hasattr(self, "subscription_manager"):
@@ -96,6 +115,13 @@ class SoSLyze:
 
         if hasattr(self, "discovery"):
             self.discovery.output()
+
+        if self.args.output_file:
+            sys.stdout = old_stdout
+            with open(self.args.output_file, 'w') as f:
+                f.write(buffer.getvalue())
+            enable_ansi_colors()
+            print(f"{Style.YELLOW_BOLD}Output saved to: {self.args.output_file}{Style.RESET}")
 
 
 #SoSLyze().output()

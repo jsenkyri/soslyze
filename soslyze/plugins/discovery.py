@@ -26,12 +26,12 @@ class Discovery:
                 "podman_logs_-t_discovery-toolbox").read_text()
 
     def output(self):
-        print_headline("### DISCOVERY INFORMATION ###")
+        print_headline("# DISCOVERY INFORMATION")
         if hasattr(self, "container_status"):
-            print_value("Container status:", self.container_status)
+            print_value("## Container status:", self.container_status)
         if hasattr(self, "discovery_log"):
-            print_value("Log Discovery:", self.discovery_log)
+            print_value("## Log Discovery:", self.discovery_log)
         if hasattr(self, "toolbox_log"):
-            print_value("Log Toolbox:", self.toolbox_log)
+            print_value("## Log Toolbox:", self.toolbox_log)
         if hasattr(self, "dsc_db_log"):
-            print_value("Log dsc-db:", self.dsc_db_log)
+            print_value("## Log dsc-db:", self.dsc_db_log)

@@ -27,11 +27,11 @@ class Insights:
                 "insights-client_--test-connection_--net-debug").read_text()
 
     def output(self):
-        print_headline("### INSIGHTS ###")
+        print_headline("# INSIGHTS")
         if hasattr(self, "client"):
-            print_value("Version of insights-client:", self.client)
+            print_value("## Version of insights-client:", self.client)
         if hasattr(self, "config"):
-            print_value("Insights configuration" +
+            print_value("## Insights configuration" +
                         "(shows only non-default settings):", self.config)
         if hasattr(self, "network"):
-            print_value("Insights connectivity check:", self.network)
+            print_value("## Insights connectivity check:", self.network)

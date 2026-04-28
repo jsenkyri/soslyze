@@ -54,31 +54,31 @@ class Rhel:
                 path + '/proc/sys/crypto/fips_enabled').read_text()
 
     def output(self):
-        print_headline("### GENERAL INFORMATION ###")
+        print_headline("# GENERAL INFORMATION")
         if hasattr(self, 'hostname'):
-            print_value("Hostname:", self.hostname)
+            print_value("## Hostname:", self.hostname)
         if hasattr(self, 'ip'):
-            print_value("NICs:", self.ip)
+            print_value("## NICs:", self.ip)
         if hasattr(self, 'date'):
-            print_value("Time and date:", self.date)
+            print_value("## Time and date:", self.date)
         if hasattr(self, 'ntp'):
-            print_value("NTP/chrony stats:", self.ntp)
+            print_value("## NTP/chrony stats:", self.ntp)
         if hasattr(self, 'release'):
-            print_value("Release version:", self.release)
+            print_value("## Release version:", self.release)
         if hasattr(self, 'ram'):
-            print_value("Memory:", self.ram)
+            print_value("## Memory:", self.ram)
         if hasattr(self, 'cpu'):
-            print_value("CPU:", self.cpu)
+            print_value("## CPU:", self.cpu)
         if hasattr(self, 'full_fs'):
-            print_value("Filesystems over 90% usage:", self.full_fs)
+            print_value("## Filesystems over 90% usage:", self.full_fs)
         if hasattr(self, 'selinux'):
-            print_value("SELinux runtime:", self.selinux)
+            print_value("## SELinux runtime:", self.selinux)
         if hasattr(self, 'selinux_conf'):
-            print_value("SELinux config file:", self.selinux_conf)
+            print_value("## SELinux config file:", self.selinux_conf)
         if hasattr(self, 'virt_what'):
-            print_value("VM or physical:", self.virt_what)
+            print_value("## VM or physical:", self.virt_what)
         if hasattr(self, 'fips'):
-            print_value("FIPS mode (0=disabled, 1=enabled):", self.fips)
+            print_value("## FIPS mode (0=disabled, 1=enabled):", self.fips)
 
 
 class Rhel8(Rhel):
@@ -97,7 +97,7 @@ class Rhel8(Rhel):
     def output(self):
         super().output()
         if hasattr(self, 'crypto'):
-            print_value("Crypto policy:", self.crypto)
+            print_value("## Crypto policy:", self.crypto)
 
 
 class Rhel7(Rhel):

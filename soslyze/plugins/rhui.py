@@ -34,14 +34,14 @@ class Rhui:
                 r"^(\[rhua\]|hostname|remote_fs|loadbalancer).*")
 
     def output(self):
-        print_headline("### RHUI INFORMATION ###")
+        print_headline("# RHUI INFORMATION")
         if self.identity:
-            print_value("Server identity:", self.identity)
+            print_value("## Server identity:", self.identity)
         if self.status:
-            print_value("RHUA status:", self.status)
+            print_value("## RHUA status:", self.status)
         if hasattr(self, "registered"):
-            print_value("Registered to:", self.registered)
+            print_value("## Registered to:", self.registered)
         if hasattr(self, "proxy"):
-            print_value("RHUA proxy:", self.proxy)
+            print_value("## RHUA proxy:", self.proxy)
         if hasattr(self, "infra"):
-            print_value("RHUI infrastructure:", self.infra)
+            print_value("## RHUI infrastructure:", self.infra)

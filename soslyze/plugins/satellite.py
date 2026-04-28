@@ -186,56 +186,56 @@ class Satellite:
 
 
     def output(self):
-        print_headline("### SATELLITE INFORMATION ###")
+        print_headline("# SATELLITE INFORMATION")
         if hasattr(self, "release"):
-            print_value("Satellite version:", self.release)
+            print_value("## Satellite version:", self.release)
         if hasattr(self, "health"):
-            print_value("Service status (hammer ping):", self.health)
+            print_value("## Service status (hammer ping):", self.health)
         if hasattr(self, "certs"):
-            print_value("Custom or default certificates:", self.certs)
+            print_value("## Custom or default certificates:", self.certs)
         if hasattr(self, "hiera"):
-            print_value("Custom hiera:", self.hiera)
+            print_value("## Custom hiera:", self.hiera)
         if hasattr(self, "capsules"):
-            print_value("Capsule(s) overview:", self.capsules)
+            print_value("## Capsule(s) overview:", self.capsules)
         if hasattr(self, "sca"):
-            print_value("Organizations & SCA:", self.sca)
+            print_value("## Organizations & SCA:", self.sca)
         if hasattr(self, "tasks_running"):
-            print_value("Running tasks:", self.tasks_running)
+            print_value("## Running tasks:", self.tasks_running)
         if hasattr(self, "tasks_paused"):
-            print_value("Paused tasks:", self.tasks_paused)
+            print_value("## Paused tasks:", self.tasks_paused)
         if hasattr(self, "settings"):
-            print_value("Satellite settings (nil=default):", self.settings)
+            print_value("## Satellite settings (nil=default):", self.settings)
         if hasattr(self, "insights_onprem"):
-            print_value("Insights On-Premise (IoP):", self.insights_onprem)
+            print_value("## Insights On-Premise (IoP):", self.insights_onprem)
         if hasattr(self, "ansible"):
-            print_value("Ansible configuration:", self.ansible)
+            print_value("## Ansible configuration:", self.ansible)
         if hasattr(self, "tuning_profile"):
-            print_value("Tuning profile:", self.tuning_profile)
+            print_value("## Tuning profile:", self.tuning_profile)
         if hasattr(self, "puma_workers"):
-            print_value("Puma workers & threads:", self.puma_workers)
+            print_value("## Puma workers & threads:", self.puma_workers)
         if hasattr(self, "puma_pool"):
-            print_value("Puma DB pool:", self.puma_pool)
+            print_value("## Puma DB pool:", self.puma_pool)
         if hasattr(self, "dynflow"):
-            print_value("Dynflow sidekiq status:", self.dynflow)
+            print_value("## Dynflow sidekiq status:", self.dynflow)
         if hasattr(self, "httpd"):
-            print_value("Httpd tuning:", self.httpd)
+            print_value("## Httpd tuning:", self.httpd)
         if hasattr(self, "puppet"):
-            print_value("Puppet tuning:", self.puppet)
+            print_value("## Puppet tuning:", self.puppet)
         if hasattr(self, "pgsql"):
-            print_value("Postgresql tuning:", self.pgsql)
+            print_value("## Postgresql tuning:", self.pgsql)
         if hasattr(self, "fs_cp"):
-            print_value("/var/lib/candlepin usage:", self.fs_cp)
+            print_value("## /var/lib/candlepin usage:", self.fs_cp)
         if hasattr(self, "fs_pgsql"):
-            print_value("/var/lib/pgsql usage:", self.fs_pgsql)
+            print_value("## /var/lib/pgsql usage:", self.fs_pgsql)
         if hasattr(self, "db_foreman"):
-            print_value("Foreman db table sizes:", self.db_foreman)
+            print_value("## Foreman db table sizes:", self.db_foreman)
         if hasattr(self, "db_candlepin"):
-            print_value("Candlepin db table sizes:", self.db_candlepin)
+            print_value("## Candlepin db table sizes:", self.db_candlepin)
         if hasattr(self, "db_facts"):
-            print_value("Stored foreman facts:", self.db_facts)
+            print_value("## Stored foreman facts:", self.db_facts)
         if hasattr(self, "metrics"):
-            print_value("Usage metrics:", self.metrics)
+            print_value("## Usage metrics:", self.metrics)
         if hasattr(self, "installer"):
-            print_value("Recent installer runs:", "\n".join(self.installer[0:5])) 
+            print_value("## Recent installer runs:", "\n".join(self.installer[0:5]))
         if hasattr(self, "maintain"):
-            print_value("Recent foreman-maintain actions (upgrade and service only):", "\n".join(self.maintain[0:5])) 
+            print_value("## Recent foreman-maintain actions (upgrade and service only):", "\n".join(self.maintain[0:5])) 

@@ -61,7 +61,9 @@ class SubscriptionManager:
             for fact in os.listdir(path + '/etc/rhsm/facts/'):
                 if fact == 'leapp.facts':
                     continue
-                lines.append(f"\n{Style.GREY}{fact}{Style.RESET}")
+                if lines:  # Add newline separator only if not the first item
+                    lines.append("")
+                lines.append(f"{Style.GREY}{fact}{Style.RESET}")
                 lines.append(Path(f"{path}/etc/rhsm/facts/{fact}")
                              .read_text(encoding="utf-8"))
             self.facts = '\n'.join(lines)
@@ -77,22 +79,22 @@ class SubscriptionManager:
             parse_text(path + '/dmidecode', r".*uuid.*", options=re.IGNORECASE)
 
     def output(self):
-        print_headline("### SUBSCRIPTIONS & REPOSITORIES ###")
+        print_headline("# SUBSCRIPTIONS & REPOSITORIES")
         if hasattr(self, "platform"):
-            print_value("How is the system registered:", self.platform)
+            print_value("## How is the system registered:", self.platform)
         if hasattr(self, "proxy"):
-            print_value("Proxy information (rhsm.conf):", self.proxy)
+            print_value("## Proxy information (rhsm.conf):", self.proxy)
         if hasattr(self, "env_proxy"):
-            print_value("Proxy information (env vars):", self.env_proxy)
+            print_value("## Proxy information (env vars):", self.env_proxy)
         if hasattr(self, "content_access"):
-            print_value("SCA:", f"{Style.GREY}{str(self.content_access)}{Style.RESET}")
+            print_value("## SCA:", f"{Style.GREY}{str(self.content_access)}{Style.RESET}")
         if hasattr(self, "consumed"):
-            print_value("Subscriptions attached:", self.consumed)
+            print_value("## Subscriptions attached:", self.consumed)
         if hasattr(self, "installed_products"):
-            print_value("Installed products:", self.installed_products)
+            print_value("## Installed products:", self.installed_products)
         if hasattr(self, "lfce"):
-            print_value("CV, LFCE and organization:", self.lfce)
+            print_value("## CV, LFCE and organization:", self.lfce)
         if hasattr(self, "facts"):
-            print_value("Custom RHSM facts (leapp.facts omitted):", self.facts)
+            print_value("## Custom RHSM facts (leapp.facts omitted):", self.facts)
         if hasattr(self, "uuid"):
-            print_value("RHSM/DMI UUID:", self.uuid)
+            print_value("## RHSM/DMI UUID:", self.uuid)

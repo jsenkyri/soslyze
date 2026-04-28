@@ -35,8 +35,8 @@ class Rpm:
                 path + '/var/lib/rhsm/cache/releasever.json').read_text()
 
     def output(self):
-        print_value("Packages from 3rd party repositories:", self.rpms)
-        print_value("Repo URLs from redhat.repo:", self.urls)
+        print_value("## Packages from 3rd party repositories:", self.rpms)
+        print_value("## Repo URLs from redhat.repo:", self.urls)
 
 
 class Dnf(Rpm):
@@ -66,15 +66,15 @@ class Dnf(Rpm):
     def output(self):
         super().output()
         if hasattr(self, "enabled"):
-            print_value("Enabled repositories:", self.enabled)
+            print_value("## Enabled repositories:", self.enabled)
         if hasattr(self, "history"):
-            print_value("Yum/dnf history:", self.history)
+            print_value("## Yum/dnf history:", self.history)
         if hasattr(self, "exclude"):
-            print_value("Excluded packages by yum/dnf:", self.exclude)
+            print_value("## Excluded packages by yum/dnf:", self.exclude)
         if hasattr(self, "vars"):
-            print_value("Yum/dnf variables:", self.vars)
+            print_value("## Yum/dnf variables:", self.vars)
         if hasattr(self, "releasever"):
-            print_value("Release version set by subscription-manager:", self.releasever)
+            print_value("## Release version set by subscription-manager:", self.releasever)
 
 
 class Yum(Rpm):
@@ -102,9 +102,9 @@ class Yum(Rpm):
 
     def output(self):
         super().output()
-        print_value("Enabled repositories:", self.enabled)
-        print_value("Yum/dnf history:", self.history)
-        print_value("Excluded packages by yum/dnf:", self.exclude)
-        print_value("Yum/dnf variables:", self.vars)
+        print_value("## Enabled repositories:", self.enabled)
+        print_value("## Yum/dnf history:", self.history)
+        print_value("## Excluded packages by yum/dnf:", self.exclude)
+        print_value("## Yum/dnf variables:", self.vars)
         if hasattr(self, "releasever"):
-            print_value("Release version set by subscription-manager:", self.releasever)
+            print_value("## Release version set by subscription-manager:", self.releasever)

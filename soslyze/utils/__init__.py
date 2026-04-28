@@ -8,7 +8,9 @@ def print_headline(line):
 
 def print_value(line, value):
     print((Style.BLUE_BOLD + "{0}" + Style.RESET_NEW_LINE +
-           "{1}" + Style.NEW_LINE).format(line, value.rstrip()))
+           "```" + Style.NEW_LINE +
+           "{1}" + Style.NEW_LINE +
+           "```" + Style.NEW_LINE).format(line, value.rstrip()))
 
 
 def package_present(path, name):
@@ -49,3 +51,23 @@ class Style:
     RESET = '\033[0m'
     NEW_LINE = '\n'
     RESET_NEW_LINE = '\033[0m\n'
+
+
+def disable_ansi_colors():
+    """Remove ANSI codes for file output"""
+    Style.GREY = ''
+    Style.YELLOW_BOLD = ''
+    Style.BLUE_BOLD = ''
+    Style.CYAN_BOLD = ''
+    Style.RESET = ''
+    Style.RESET_NEW_LINE = '\n'
+
+
+def enable_ansi_colors():
+    """Restore ANSI codes for terminal output"""
+    Style.GREY = '\033[0;90m'
+    Style.YELLOW_BOLD = '\033[01;33m\033[1m'
+    Style.BLUE_BOLD = '\033[0;34m\033[1m'
+    Style.CYAN_BOLD = '\033[01;36m\033[1m'
+    Style.RESET = '\033[0m'
+    Style.RESET_NEW_LINE = '\033[0m\n'
