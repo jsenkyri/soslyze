@@ -168,7 +168,7 @@ class Satellite:
                             l = line.translate({ord(i): None for i in '[]",'}).split(" ")
                             if len(l) > 10:
                                 self.installer.append(
-                                    f"{l[0]}T{l[1]} foreman-installer {" ".join(l[9:])}")
+                                    f"{l[0]}T{l[1]} foreman-installer {' '.join(l[9:])}")
         self.installer.sort(reverse=True)
         if os.path.isdir(path + "/var/log/foreman-maintain/"):
             self.maintain = []
@@ -181,7 +181,7 @@ class Satellite:
                             l = line.translate({ord(i): None for i in '[]",'}).split(" ")
                             if l[13] in ["service", "upgrade", "update"]:
                                 self.maintain.append(
-                                    f"{l[1]}T{l[2]} foreman-maintain {" ".join(l[13:])}")
+                                    f"{l[1]}T{l[2]} foreman-maintain {' '.join(l[13:])}")
             self.maintain.sort(reverse=True)
 
 
