@@ -15,7 +15,7 @@ def print_value(line, value):
 
 def package_present(path, name):
     result = False
-    for line in Path(path + '/installed-rpms').read_text().splitlines():
+    for line in Path(path + '/installed-rpms').read_text(errors='ignore').splitlines():
         if re.search(r'^' + name + '.*', line):
             result = True
     return result
@@ -24,7 +24,7 @@ def package_present(path, name):
 def parse_text(path, regex, options=0):
     lines = []
     try:
-        for line in Path(path).read_text().splitlines():
+        for line in Path(path).read_text(errors='ignore').splitlines():
             if re.search(regex, line, options):
                 lines.append(line)
     except FileNotFoundError:
@@ -35,7 +35,7 @@ def parse_text(path, regex, options=0):
 def parse_text_exclude(path, regex):
     lines = []
     try:
-        for line in Path(path).read_text().splitlines():
+        for line in Path(path).read_text(errors='ignore').splitlines():
             if not re.search(regex, line):
                 lines.append(line)
     except FileNotFoundError:

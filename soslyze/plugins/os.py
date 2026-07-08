@@ -40,7 +40,7 @@ class Rhel:
             self.full_fs = '\n'.join(lines)
             lines.clear()
         if not hasattr(self, "full_fs") or not self.full_fs:
-            self.full_fs = f"{Style.GREY}No filesystems over 90% usage, or the /df file is missing{Style.RESET}"
+            self.full_fs = f"{Style.GREY}No filesystems over 90% usage, or the ./df file is missing{Style.RESET}"
         if os.path.isfile(path + '/sos_commands/selinux/sestatus'):
             self.selinux = parse_text(path + '/sos_commands/selinux/sestatus',
                                       r"SELinux status.*|Current mode.*")

@@ -13,7 +13,7 @@ class Rpm:
                  .format('Name', 'Vendor', 'Build Host'), '-' * 159]
         for line in Path(
                 path + '/sos_commands/rpm/package-data')\
-                .read_text().splitlines():
+                .read_text(errors='ignore').splitlines():
             if re.search(r"^(?!.*Red Hat.*).*", line):
                 split = line.split('\t')
                 lines.append('{:75s}| {:30s}| {:50s}'
@@ -22,7 +22,7 @@ class Rpm:
         lines.clear()
         if os.path.isfile(path + '/etc/yum.repos.d/redhat.repo'):
             tmp = Path(path + '/etc/yum.repos.d/redhat.repo')\
-                  .read_text().splitlines()
+                  .read_text(errors='ignore').splitlines()
             for i in range(len(tmp)):
                 if re.search(r".*enabled *= *1.*", tmp[i]):
                     lines.append(tmp[i-3])
@@ -32,7 +32,7 @@ class Rpm:
         lines.clear()
         if os.path.isfile(path + '/var/lib/rhsm/cache/releasever.json'):
             self.releasever = Path(
-                path + '/var/lib/rhsm/cache/releasever.json').read_text()
+                path + '/var/lib/rhsm/cache/releasever.json').read_text(errors='ignore')
 
     def output(self):
         print_value("## Packages from 3rd party repositories:", self.rpms)
@@ -44,10 +44,10 @@ class Dnf(Rpm):
         super().__init__(path)
         if os.path.isfile(path + '/sos_commands/dnf/dnf_-C_repolist'):
             self.enabled = Path(
-                path + '/sos_commands/dnf/dnf_-C_repolist').read_text()
+                path + '/sos_commands/dnf/dnf_-C_repolist').read_text(errors='ignore')
         if os.path.isfile(path + '/sos_commands/dnf/dnf_history'):
             self.history = '\n'.join(Path(
-                path + '/sos_commands/dnf/dnf_history').read_text()
+                path + '/sos_commands/dnf/dnf_history').read_text(errors='ignore')
                                      .splitlines()[0:15])
         if os.path.isfile(path + "/etc/dnf/dnf.conf"):
             self.exclude = parse_text(
@@ -61,7 +61,7 @@ class Dnf(Rpm):
         if os.path.isdir(path + '/etc/dnf/vars/'):
             self.vars = '\n'.join(os.listdir(path + '/etc/dnf/vars/'))
         if not hasattr(self, "vars") or not self.vars:
-            self.vars = f"{Style.GREY}No yum/dnf variable files found in /etc{Style.RESET}"
+            self.vars = f"{Style.GREY}No yum/dnf variable files found in ./etc{Style.RESET}"
 
     def output(self):
         super().output()
@@ -81,9 +81,9 @@ class Yum(Rpm):
     def __init__(self, path):
         super().__init__(path)
         self.enabled = Path(
-            path + '/sos_commands/yum/yum_-C_repolist').read_text()
+            path + '/sos_commands/yum/yum_-C_repolist').read_text(errors='ignore')
         self.history = '\n'.join(Path(
-            path + '/sos_commands/yum/yum_history').read_text()
+            path + '/sos_commands/yum/yum_history').read_text(errors='ignore')
                                  .splitlines()[0:15])
         if os.path.isfile(path + "/etc/yum.conf"):
             self.exclude = parse_text(path + "/etc/yum.conf", r'.*exclude.*',
@@ -98,7 +98,7 @@ class Yum(Rpm):
         if os.path.isdir(path + '/etc/yum/vars/'):
             self.vars = '\n'.join(os.listdir(path + '/etc/yum/vars/'))
         if not hasattr(self, "vars") or not self.vars:
-            self.vars = f"{Style.GREY}No yum/dnf variables found in /etc{Style.RESET}"
+            self.vars = f"{Style.GREY}No yum/dnf variables found in ./etc{Style.RESET}"
 
     def output(self):
         super().output()

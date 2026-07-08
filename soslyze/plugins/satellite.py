@@ -114,7 +114,7 @@ class Satellite:
             if "iop-advisor" in Path(path + "/sos_commands/podman/podman_ps_-a").read_text():
                 self.insights_onprem = f"{Style.GREY}Yes, Satellite uses Insights On-Premise{Style.RESET}"
             else:
-                self.insights_onprem = f"{Style.GREY}No, Satellite does not use Insights On-Premise{Style.RESET}"
+                self.insights_onprem = f"{Style.GREY}Satellite does not use IoP or the containers are not up{Style.RESET}"
         if os.path.isfile(
                 path + "/sos_commands/candlepin/simple_content_access"):
             self.sca = Path(
@@ -176,7 +176,7 @@ class Satellite:
                 if not f.endswith(".gz"):
                     for line in Path(
                         path + f"/var/log/foreman-maintain/{f}"
-                    ).read_text().splitlines():
+                    ).read_text(errors='ignore').splitlines():
                         if "Running foreman-maintain" in line:
                             l = line.translate({ord(i): None for i in '[]",'}).split(" ")
                             if l[13] in ["service", "upgrade", "update"]:
